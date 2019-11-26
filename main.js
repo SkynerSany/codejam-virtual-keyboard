@@ -1,132 +1,86 @@
-let btn = document.querySelector('.btn'),
-    body = document.querySelector('.body'),
-    textarea = document.createElement('textarea'),
-    ruMas = ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 
-            'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'Del', 'Caps lock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter', 
-            'Shift', '\\', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '/', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', ' ', 'Alt', 'Ctrl', '←', '↓', '→'],
-    ruSupMas = ['!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+'],
-    engMas = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 
-            'u', 'i', 'o', 'p', '[', ']', '\\', 'Del', 'Caps lock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter', 
-            'Shift', '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', ' ', 'Alt', 'Ctrl', '←', '↓', '→'],
-    engSupMas = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+'],
-    check = 0,
-    keyboard,
-    div,
-    span,
-    sup,
-    switcher,
-    mas = [];
+const body = document.querySelector('.body');    
+const textarea = document.createElement('textarea');
+const ruMas = ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 
+                'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'Del', 'Caps lock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter', 
+                'Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '/', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', ' ', 'Alt', 'Ctrl', '←', '↓', '→'];
+const ruSupMas = ['!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+'];
+const ruAttrMas = ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 
+                'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'Delete', 'CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter', 
+                'Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '/', 'ArrowUp', 'Shift', 'Control', 'Meta', 'Alt', ' ', 'AltGraph', 'Control', 'ArrowLeft', 'ArrowDown', 'ArrowRight'];
+const engMas = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 
+                'u', 'i', 'o', 'p', '[', ']', '\\', 'Del', 'Caps lock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter', 
+                'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', ' ', 'Alt', 'Ctrl', '←', '↓', '→'];
+const engSupMas = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+'];
+const engAttrMas = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 
+                    'u', 'i', 'o', 'p', '[', ']', '\\', 'Delete', 'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter', 
+                    'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'ArrowUp', 'Shift', 'Control', 'Meta', 'Alt', ' ', 'AltGraph', 'Control', 'ArrowLeft', 'ArrowDown', 'ArrowRight'];
+const optionKey = [{'13': 'button btn-option button-backspace'}, 
+                    {'0': 'button btn-option button-tab', 
+                        '14': 'button btn-option del'},
+                    {'0': 'button btn-option caps', 
+                        '12': 'button btn-option enter'}, 
+                    {'0': 'button btn-option shift left-shift',
+                        '11': 'button btn-option up',
+                        '12': 'button btn-option shift right-shift'}, 
+                    {'0': 'button btn-option ctrl',
+                        '1': 'button btn-option win',
+                        '2': 'button btn-option alt',
+                        '3': 'button btn-option space',
+                        '4': 'button btn-option alt',
+                        '5': 'button btn-option ctrl',
+                        '6': 'button btn-option arrow',
+                        '7': 'button btn-option arrow',
+                        '8': 'button btn-option arrow'}];
+const lengthLine = [14, 15, 13, 13, 9];
+let keyboard;
+let div;
+let span;
+let sup;
+let switcher;
+let mas = [];
 
-    if (sessionStorage.switcher) {
-        switcher = sessionStorage.switcher;
-    } else switcher = 0;
+if (sessionStorage.switcher) {
+    switcher = sessionStorage.switcher;
+} else switcher = 0;
 
-btn.addEventListener('click', () => {
-    if (check === 0) {
-        keyboard = document.createElement('div');
-        keyboard.className = 'keyboard';
-        textarea.className = 'textarea';
-        body.appendChild(textarea);
-        body.appendChild(keyboard);
+function domLoad() {
+    keyboard = document.createElement('div');
+    keyboard.className = 'keyboard';
+    textarea.className = 'textarea';
+    body.appendChild(textarea);
+    body.appendChild(keyboard);
 
-        for (let i = 0; i < 5; i++) {
-            div = document.createElement('div');
-            div.className = 'row';
-            keyboard.appendChild(div);
-            let row = document.querySelectorAll('.row');
-            open(i, row);
-        }
+    for (let i = 0; i < 5; i++) {
+        div = document.createElement('div');
+        div.className = 'row';
+        keyboard.appendChild(div);
+        let row = document.querySelectorAll('.row');
+        open(i, row);
+    }
 
-        if (switcher == 0) {
-            ruLang();
-            mas = [];
-        } else if (switcher == 2) {
-            engLang();
-            mas = [];
-        }
-        
-        btn.blur();
-        event();
-        check = 1;
+    if (switcher == 0) {
+        ruLang();
+        mas = [];
+    } else if (switcher == 2) {
+        engLang();
+        mas = [];
+    }
 
-    } else {
-        textarea.textContent = '';
-        body.removeChild(keyboard);
-        body.removeChild(textarea);
-        check = 0;
-    }             
-});
+    event();          
+}
 
 function open (k, row) {
-    let optionalText = 'optional-text',
-        n;
-
-    switch (k) {
-        case 0 : {
-            n = 14;
-            break;
-        }
-        case 1 : {
-            n = 15;
-            break;
-        }
-        case 2 : {
-            n = 13;
-            break;
-        }
-        case 3 : {
-            n = 14;
-            break;
-        }
-        case 4 : {
-            n = 9;
-            break;
-        }
-    }
+    let optionalText = 'optional-text';
+    let n = lengthLine[k];
+    
     for (let i = 0; i < n; i++) {
 
         span = document.createElement('span');
         sup = document.createElement('sup');
         div = document.createElement('div');
 
-        if (k === 0 && i === 13) {
-            div.className = 'button btn-option button-backspace';
-            span.className = optionalText;
-        } else if (k === 1 && i === 0) {
-            div.className = 'button btn-option button-tab';
-            span.className = optionalText;
-        } else if (k === 1 && i === 14) {
-            div.className = 'button btn-option del';
-            span.className = optionalText;
-        } else if (k === 2 && i === 0) {
-            div.className = 'button btn-option caps';
-            span.className = optionalText;
-        } else if (k === 2 && i === 12) {
-            div.className = 'button btn-option enter';
-            span.className = optionalText;
-        } else if (k === 3 && i === 0) {
-            div.className = 'button btn-option shift left-shift';
-            span.className = optionalText;
-        } else if (k === 3 && i === 12) {
-            div.className = 'button btn-option up';
-            span.className = optionalText;
-        } else if (k === 3 && i === 13) {
-            div.className = 'button btn-option shift right-shift';
-            span.className = optionalText;
-        } else if (k === 4 && (i === 0 || i === 5)) {
-            div.className = 'button btn-option ctrl';
-            span.className = optionalText;
-        } else if (k === 4 && i === 1) {
-            div.className = 'button btn-option win';
-            span.className = optionalText;
-        } else if (k === 4 && (i === 2 || i === 4)) {
-            div.className = 'button btn-option alt';
-            span.className = optionalText;
-        } else if (k === 4 && i === 3) {
-            div.className = 'button btn-option space';
-            span.className = optionalText;
-        } else if (k === 4 && i > 5) {
-            div.className = 'button btn-option arrow';
+        if (Object.keys(optionKey[k]).indexOf(`${i}`) !== -1) {
+            div.className = optionKey[k][i];
             span.className = optionalText;
         } else {
             div.className = 'button button-text';
@@ -143,9 +97,9 @@ function open (k, row) {
 }
 
 function ruLang () {
-
     let spanText = document.querySelectorAll('span');
     let supText = document.querySelectorAll('sup');
+    let button = document.querySelectorAll('.button');
 
     spanText.forEach((element, i) => {
         element.textContent = ruMas[i];
@@ -153,6 +107,10 @@ function ruLang () {
 
     ruSupMas.forEach((elem, i)=> {
         supText[i + 1].textContent = elem;
+    });
+
+    ruAttrMas.forEach((el, i) => {
+        button[i].setAttribute('data-name', el);
     });
 
     supText[25].textContent = '/';
@@ -164,6 +122,7 @@ function engLang () {
 
     let spanText = document.querySelectorAll('span');
     let supText = document.querySelectorAll('sup');
+    let button = document.querySelectorAll('.button');
 
     spanText.forEach((element, i) => {
         element.textContent = engMas[i];
@@ -173,115 +132,115 @@ function engLang () {
         supText[i + 1].textContent = elem;
     });
 
+    engAttrMas.forEach((el, i) => {
+        button[i].setAttribute('data-name', el);
+    });
+
     supText[25].textContent = '|';
     switcher = 2;
 
 }
 
-function event () {
+function event() {
+    const keyboard = document.querySelector('.keyboard');
+    const buttonShift = document.querySelector('.shift');
+    const buttonCaps = document.querySelector('.caps');
+    let buttonText = document.querySelectorAll('.button-text');
+    let checker = 0;
+    const events = {
+        ' ': () => textarea.textContent += ' ',
+        'Backspace': () => textarea.textContent = textarea.textContent.slice(0, textarea.textLength - 1),
+        'CapsLock': () => clickCaps(),
+        'Enter': () => textarea.textContent += '\n',
+        'Tab': () => textarea.textContent += '   '
+    };
 
-    let buttonText = document.querySelectorAll('.button-text'),
-        buttonEnter = document.querySelector('.enter'),
-        buttonBackspace = document.querySelector('.button-backspace'),
-        buttonTab = document.querySelector('.button-tab'),
-        spanText = document.querySelectorAll('span'),
-        buttonShift = document.querySelector('.shift'),
-        buttonCaps = document.querySelector('.caps'),
-        buttonSpace = document.querySelector('.space'),
-        checker = 0;
-
-    buttonEnter.addEventListener('click', () => textarea.textContent += '\n');
-    buttonBackspace.addEventListener('click', () => textarea.textContent = textarea.textContent.slice(0, textarea.textLength - 1));
-    buttonTab.addEventListener('click', () => textarea.textContent += '   ');
-    buttonSpace.addEventListener('click', () => textarea.textContent += ' ');
-
-    buttonText.forEach(elem => {
-        elem.addEventListener('click', () => {
-            textarea.textContent += elem.children[1].textContent;
-        });
-    });
-
-    buttonShift.addEventListener('mousedown', () => { 
+    function textToUpperCase() {
         buttonText.forEach((elem, i, arr) => {
             arr[i].children[1].textContent = elem.children[1].textContent.toUpperCase();
+            arr[i].setAttribute('data-name', buttonText[i].getAttribute('data-name').toUpperCase());
         });
-    });
+    }
 
-    buttonShift.addEventListener('mouseup', () => { 
+    function textToLowerCase() {
         buttonText.forEach((elem, i, arr) => {
             arr[i].children[1].textContent = elem.children[1].textContent.toLowerCase();
+            arr[i].setAttribute('data-name', buttonText[i].getAttribute('data-name').toLowerCase());
         });
-    });
+    }
 
-    buttonCaps.addEventListener('click', () => { 
+    function clickCaps() {
         if (!checker) {
-            buttonText.forEach((elem, i, arr) => {
-                arr[i].children[1].textContent = elem.children[1].textContent.toUpperCase();
-            });
+            textToUpperCase();
             buttonCaps.id = 'active';
             checker = 1;
         } else {
-            buttonText.forEach((elem, i, arr) => {
-                arr[i].children[1].textContent = elem.children[1].textContent.toLowerCase();
-            });
+            textToLowerCase();
             buttonCaps.id = '';
             checker = 0;
         }
-        
+    }
+
+    buttonShift.addEventListener('mousedown', () => { 
+        textToUpperCase();
+    });
+
+    buttonShift.addEventListener('mouseup', () => { 
+        textToLowerCase();
+    });
+
+    keyboard.addEventListener('click', (event) => {
+        let name = '';
+
+        if (event.target.tagName === 'SUP' || event.target.tagName === 'SPAN') {
+            name = event.target.parentNode.dataset.name;
+        } else if(event.target.className.indexOf('button') != -1) {
+            name = event.target.dataset.name;
+        }
+
+        if (name.length === 1) {
+            textarea.textContent += name;
+        } else if (typeof (events[name]) === 'function'){
+            events[name]();
+        } else if (name !== 'Shift') {
+            events[name];
+        }
     });
 
     document.addEventListener('keydown', (event) => {
-        spanText.forEach((elem) => {
-            if(elem.textContent.toLowerCase() == event.key.toLowerCase() || 
-            (elem.textContent.toLowerCase() == 'caps lock' && 'capslock' == event.key.toLowerCase()) || 
-            (elem.textContent.toLowerCase() == 'ctrl' && 'control' == event.key.toLowerCase()) || 
-            (elem.textContent.toLowerCase() == 'del' && 'delete' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == '↑' && 'arrowup' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == '↓' && 'arrowdown' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == '→' && 'arrowright' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == '←' && 'arrowleft' == event.key.toLowerCase()) || 
-            (elem.textContent.toLowerCase() == 'win' && 'meta' == event.key.toLowerCase()))  {
+        let name = event.key;
+        if (name === 'Shift') {
+            textToUpperCase();
+        } 
+        
+        if (name !== 'CapsLock') document.querySelectorAll(`[data-name = '${name}']`).forEach(el => el.id = 'active');
 
-                elem.parentElement.id = 'active';
-
-                if (event.key.toLowerCase() == 'shift') {
-
-                    mas[0] = 'shift';
-                    switchLang();
-
-                    buttonText.forEach((elem, i, arr) => {
-                        arr[i].children[1].textContent = elem.children[1].textContent.toUpperCase();
-                    });
-                } else elem.parentElement.click();
-
-                if (event.key.toLowerCase() == 'alt') mas[1] = 'alt';
-            }
-        });
+        if (name.length === 1) {
+            textarea.textContent += name;
+        } else if (typeof (events[name]) === 'function'){
+            events[name]();
+        } else if (name !== 'Shift') {
+            events[name];
+        }
     });
 
     document.addEventListener('keyup', (event) => {
-        spanText.forEach((elem) => {
-            if(elem.textContent.toLowerCase() == event.key.toLowerCase() || 
-            (elem.textContent.toLowerCase() == 'ctrl' && 'control' == event.key.toLowerCase()) || 
-            (elem.textContent.toLowerCase() == 'del' && 'delete' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == '↑' && 'arrowup' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == '↓' && 'arrowdown' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == '→' && 'arrowright' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == '←' && 'arrowleft' == event.key.toLowerCase()) ||
-            (elem.textContent.toLowerCase() == 'win' && 'meta' == event.key.toLowerCase())) {
-                if (event.key.toLowerCase() == 'shift') {
-                    buttonText.forEach((elem, i, arr) => {
-                        arr[i].children[1].textContent = elem.children[1].textContent.toLowerCase();
-                    });
-                }
-                elem.parentElement.id = '';
-            }
-        });
-    });
-    
-    function switchLang(){
+        let name = event.key;
 
-        if (mas[0] == 'shift' && mas[1] == 'alt') {
+        if (name === 'Shift') {
+            textToLowerCase();
+            mas[0] = name;
+            switchLang();
+        } else if(name === 'Alt') {
+            mas[1] = name;
+            switchLang();
+        }
+
+        if (name !== 'CapsLock') document.querySelectorAll(`[data-name = '${name}']`).forEach(el => el.id = '');
+    });
+
+    function switchLang() {
+        if (mas[0] == 'Shift' && mas[1] == 'Alt') {
             if (switcher == 2) {
                 ruLang();
                 mas = [];
@@ -292,5 +251,7 @@ function event () {
         }
     }
 }
+
+domLoad();
 
 window.onunload = () => sessionStorage.switcher = switcher;
