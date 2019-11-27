@@ -31,6 +31,8 @@ const optionKey = [{'13': 'button btn-option button-backspace'},
                         '6': 'button btn-option arrow',
                         '7': 'button btn-option arrow',
                         '8': 'button btn-option arrow'}];
+const languages = {'en': 'en',
+                    'ru': 'ru'};
 const lengthLine = [14, 15, 13, 13, 9];
 let keyboard;
 let div;
@@ -41,7 +43,7 @@ let mas = [];
 
 if (sessionStorage.switcher) {
     switcher = sessionStorage.switcher;
-} else switcher = 0;
+} else switcher = languages.ru;
 
 function domLoad() {
     keyboard = document.createElement('div');
@@ -58,10 +60,10 @@ function domLoad() {
         open(i, row);
     }
 
-    if (switcher == 0) {
+    if (switcher === languages.ru) {
         ruLang();
         mas = [];
-    } else if (switcher == 2) {
+    } else if (switcher === languages.en) {
         engLang();
         mas = [];
     }
@@ -113,8 +115,7 @@ function ruLang () {
         button[i].setAttribute('data-name', el);
     });
 
-    supText[25].textContent = '/';
-    switcher = 0;
+    switcher = languages.ru;
 
 }
 
@@ -136,8 +137,7 @@ function engLang () {
         button[i].setAttribute('data-name', el);
     });
 
-    supText[25].textContent = '|';
-    switcher = 2;
+    switcher = languages.en;
 
 }
 
@@ -146,13 +146,13 @@ function event() {
     const buttonShift = document.querySelector('.shift');
     const buttonCaps = document.querySelector('.caps');
     let buttonText = document.querySelectorAll('.button-text');
-    let checker = 0;
+    let checker = false;
     const events = {
-        ' ': () => textarea.textContent += ' ',
-        'Backspace': () => textarea.textContent = textarea.textContent.slice(0, textarea.textLength - 1),
+        ' ': () => textarea.value += ' ',
+        'Backspace': () => textarea.value = textarea.value.slice(0, textarea.textLength - 1),
         'CapsLock': () => clickCaps(),
-        'Enter': () => textarea.textContent += '\n',
-        'Tab': () => textarea.textContent += '   '
+        'Enter': () => textarea.value += '\n',
+        'Tab': () => textarea.value += '   '
     };
 
     function textToUpperCase() {
@@ -172,12 +172,12 @@ function event() {
     function clickCaps() {
         if (!checker) {
             textToUpperCase();
-            buttonCaps.id = 'active';
-            checker = 1;
+            buttonCaps.className = `${buttonCaps.className} active`;
+            checker = true;
         } else {
             textToLowerCase();
-            buttonCaps.id = '';
-            checker = 0;
+            buttonCaps.className = buttonCaps.className.replace(/ active/gu, '');
+            checker = false;
         }
     }
 
@@ -199,7 +199,7 @@ function event() {
         }
 
         if (name.length === 1) {
-            textarea.textContent += name;
+            textarea.value += name;
         } else if (typeof (events[name]) === 'function'){
             events[name]();
         } else if (name !== 'Shift') {
@@ -208,15 +208,16 @@ function event() {
     });
 
     document.addEventListener('keydown', (event) => {
-        let name = event.key;
+        const name = event.key;
+        const dataName = document.querySelectorAll(`[data-name = '${name}']`);
         if (name === 'Shift') {
             textToUpperCase();
         } 
         
-        if (name !== 'CapsLock') document.querySelectorAll(`[data-name = '${name}']`).forEach(el => el.id = 'active');
+        if (name !== 'CapsLock') dataName.forEach(el => el.className = `${el.className} active`);
 
-        if (name.length === 1) {
-            textarea.textContent += name;
+        if (name.length === 1 && dataName.length) {
+            textarea.value += name;
         } else if (typeof (events[name]) === 'function'){
             events[name]();
         } else if (name !== 'Shift') {
@@ -236,15 +237,15 @@ function event() {
             switchLang();
         }
 
-        if (name !== 'CapsLock') document.querySelectorAll(`[data-name = '${name}']`).forEach(el => el.id = '');
+        if (name !== 'CapsLock') document.querySelectorAll(`[data-name = '${name}']`).forEach(el => el.className = el.className.replace(/ active/gu, ''));
     });
 
     function switchLang() {
         if (mas[0] == 'Shift' && mas[1] == 'Alt') {
-            if (switcher == 2) {
+            if (switcher === languages.en) {
                 ruLang();
                 mas = [];
-            }else if (switcher == 0) {
+            }else if (switcher === languages.ru) {
                 engLang();
                 mas = [];
             }

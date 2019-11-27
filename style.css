@@ -36,8 +36,8 @@
     background-color: #2700ff;
 }
 
-#active {
-    background-color: #2700ff;
+.active {
+    background-color: #2700ff !important;
 }
 
 .btn-option {
