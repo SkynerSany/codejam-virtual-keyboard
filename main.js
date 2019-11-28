@@ -40,6 +40,7 @@ let span;
 let sup;
 let switcher;
 let mas = [];
+let rowMas = [];
 
 if (sessionStorage.switcher) {
     switcher = sessionStorage.switcher;
@@ -49,16 +50,18 @@ function domLoad() {
     keyboard = document.createElement('div');
     keyboard.className = 'keyboard';
     textarea.className = 'textarea';
-    body.appendChild(textarea);
-    body.appendChild(keyboard);
+
 
     for (let i = 0; i < 5; i++) {
         div = document.createElement('div');
         div.className = 'row';
         keyboard.appendChild(div);
-        let row = document.querySelectorAll('.row');
-        open(i, row);
+        rowMas.push(div);
+        open(i, rowMas);
     }
+
+    body.appendChild(textarea);
+    body.appendChild(keyboard);
 
     if (switcher === languages.ru) {
         ruLang();
@@ -94,7 +97,6 @@ function open (k, row) {
         div.appendChild(span);
         row[k].appendChild(div);
         keyboard.appendChild(row[k]);
-
     }
 }
 
@@ -208,6 +210,7 @@ function event() {
     });
 
     document.addEventListener('keydown', (event) => {
+        event.preventDefault();
         const name = event.key;
         const dataName = document.querySelectorAll(`[data-name = '${name}']`);
         if (name === 'Shift') {

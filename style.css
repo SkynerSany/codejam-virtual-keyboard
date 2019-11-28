@@ -33,10 +33,16 @@
 }
 
 .button:active {
+    animation-duration: 0.4s;
+    animation-name: btn-click;
+    transform: scale(1.05, 1.05);
     background-color: #2700ff;
 }
 
 .active {
+    animation-duration: 0.4s;
+    animation-name: btn-click;
+    transform: scale(1.05, 1.05);
     background-color: #2700ff !important;
 }
 
@@ -78,4 +84,22 @@
     margin: 0 auto;
     width: 64.4vw;
     color: #ffffff;
+}
+
+@keyframes btn-click {
+    20% { 
+        background-color: #ff0000;
+    }
+    40% {
+        background-color: #ff00d4;
+    }
+    60%{
+        background-color: #e100ff;
+    }
+    80%{
+        background-color: #008cff;
+    }
+    100%{
+        background-color: #2700ff;
+    }
 }
